@@ -1,0 +1,42 @@
+name: Generar proyecto Xcode
+
+on:
+  workflow_dispatch:
+
+jobs:
+  generate-xcode:
+    runs-on: macos-latest
+
+    steps:
+      - name: Descargar repositorio
+        uses: actions/checkout@v6
+
+      - name: Instalar XcodeGen
+        run: brew install xcodegen
+
+      - name: Generar proyecto Xcode
+        run: xcodegen generate
+
+      - name: Comprobar compilacion
+        run: |
+          xcodebuild \
+            -project OpenLibrary.xcodeproj \
+            -scheme OpenLibrary \
+            -configuration Debug \
+            -sdk iphonesimulator \
+            -destination 'generic/platform=iOS Simulator' \
+            CODE_SIGNING_ALLOWED=NO \
+            build
+
+      - name: Preparar archivos
+        run: |
+          mkdir OpenLibrary-Xcode
+          cp -R OpenLibrary.xcodeproj OpenLibrary-Xcode/
+          cp -R OpenLibrary OpenLibrary-Xcode/
+
+      - name: Subir proyecto Xcode
+        uses: actions/upload-artifact@v7
+        with:
+          name: OpenLibrary-Xcode
+          path: OpenLibrary-Xcode
+          if-no-files-found: error
