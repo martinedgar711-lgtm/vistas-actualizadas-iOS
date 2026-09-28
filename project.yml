@@ -1,0 +1,21 @@
+name: OpenLibrary
+
+options:
+  bundleIdPrefix: com.openlibrary
+
+targets:
+  OpenLibrary:
+    type: application
+    platform: iOS
+    deploymentTarget: "17.0"
+
+    sources:
+      - path: OpenLibrary
+
+    scheme: {}
+
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.openlibrary.app
+        GENERATE_INFOPLIST_FILE: YES
+        SWIFT_VERSION: 5.0
